@@ -1,0 +1,14 @@
+h1, h2 {
+    color: #0056b3;
+    text-align: center;
+  }
+  
+  ul, ol {
+    margin-left: 20px;
+  }
+  
+  em {
+    font-style: italic;
+    color: #007bff;
+  }
+  
