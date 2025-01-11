@@ -1,0 +1,20 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #0056b3;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+  }
+  p{    
+font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  }
+  
