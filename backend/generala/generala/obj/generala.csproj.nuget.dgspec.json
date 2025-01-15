@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\acabvil562\\Documents\\proyectoJuego\\Generala\\backend\\generala\\generala\\generala.csproj": {}
+    "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj": {}
   },
   "projects": {
-    "C:\\Users\\acabvil562\\Documents\\proyectoJuego\\Generala\\backend\\generala\\generala\\generala.csproj": {
+    "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\acabvil562\\Documents\\proyectoJuego\\Generala\\backend\\generala\\generala\\generala.csproj",
+        "projectUniqueName": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj",
         "projectName": "generala",
-        "projectPath": "C:\\Users\\acabvil562\\Documents\\proyectoJuego\\Generala\\backend\\generala\\generala\\generala.csproj",
-        "packagesPath": "C:\\Users\\acabvil562\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acabvil562\\Documents\\proyectoJuego\\Generala\\backend\\generala\\generala\\obj\\",
+        "projectPath": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj",
+        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\acabvil562\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -74,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
