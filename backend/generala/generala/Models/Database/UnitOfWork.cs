@@ -18,6 +18,7 @@ namespace generala.Models.Database
             )
         {
             _context = context;
+            UserRepository = userRepository;
         }
 
         public async Task<bool> SaveAsync()
