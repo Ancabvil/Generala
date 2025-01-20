@@ -29,7 +29,8 @@ public class Seeder
                     Email = "agustin@gmail.com",
                     Password = PasswordHelper.Hash("123456"),
                     Is_banned = false,
-                    Role = "Admin"
+                    Role = "Admin",
+                    Image = "image/image-avatar.png"
                 }
                 ,
                 new User {
@@ -37,7 +38,8 @@ public class Seeder
                     Email = "antonio@gmail.com",
                     Password = PasswordHelper.Hash("123456"),
                     Is_banned = false,
-                    Role = "User"
+                    Role = "User",
+                    Image = "image/image-avatar.png"
                 }
             ];
 

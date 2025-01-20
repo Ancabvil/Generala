@@ -12,12 +12,13 @@ public class GeneralaContext : DbContext
     private const string DATABASE_PATH = "Generala.db";
 
     // Tablas
+    public DbSet<Image> Images { get; set; }
 
     //public DbSet<Game_invitation> Game_invitation { get; set; }
 
     //public DbSet<Game_history> Game_history { get; set; }
 
-   // public DbSet<Game> Game { get; set; }
+    // public DbSet<Game> Game { get; set; }
     //public DbSet<Friend_request> Friend_request { get; set; }
 
     //public DbSet<Friendship> Friendship { get; set; }

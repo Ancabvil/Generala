@@ -24,6 +24,6 @@ public class User
 
     public string Role { get; set; } = null!;
 
-
+    public string Image { get; set; }
 
 }

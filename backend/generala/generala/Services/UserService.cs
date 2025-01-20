@@ -87,9 +87,10 @@ public class UserService
         {
             Email = model.Email,
             Nickname = model.Nickname,
-            Is_banned = model.is_banned,
+            Is_banned = false,
             Role = "User", // Rol por defecto
-            Password = PasswordHelper.Hash(model.Password)
+            Password = PasswordHelper.Hash(model.Password),
+            Image = string.IsNullOrEmpty(model.Image) ? "default_image_url" : model.Image
         };
 
         await _unitOfWork.UserRepository.InsertUserAsync(newUser);

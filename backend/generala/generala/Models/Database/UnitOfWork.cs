@@ -1,6 +1,5 @@
 ﻿using generala.Models.Database.Repositories;
 using generala.Models.Database.Repositories.Implementations;
-using generala.Models.Database.Repositories.Implementations;
 using TorchSharp.Modules;
 
 namespace generala.Models.Database
@@ -11,14 +10,20 @@ namespace generala.Models.Database
 
         public UserRepository UserRepository { get; init; }
 
+        public ImageRepository ImageRepository { get; init; }
+
+
+
 
         public UnitOfWork(
             GeneralaContext context,
-            UserRepository userRepository
+            UserRepository userRepository,
+            ImageRepository imageRepository
             )
         {
             _context = context;
             UserRepository = userRepository;
+            ImageRepository = imageRepository;
         }
 
         public async Task<bool> SaveAsync()

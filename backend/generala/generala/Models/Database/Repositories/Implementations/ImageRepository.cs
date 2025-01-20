@@ -1,6 +1,12 @@
-﻿namespace generala.Models.Database.Repositories.Implementations
+﻿using generala.Models.Database;
+using generala.Models.Database.Entities;
+using generala.Models.Database.Repositories;
+namespace generala.Models.Database.Repositories.Implementations;
+
+public class ImageRepository : Repository<Image, int>
 {
-    public class ImageRepository
+    public ImageRepository(GeneralaContext context) : base(context)
     {
+        
     }
 }

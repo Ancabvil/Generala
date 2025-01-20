@@ -14,7 +14,8 @@ public class UserMapper
             Nickname = user.Nickname,
             Email = user.Email,
             Is_banned = user.Is_banned,
-            Role = user.Role
+            Role = user.Role,
+            Image = user.Image
         };
     }
 
@@ -27,7 +28,8 @@ public class UserMapper
             Email = user.Email,
             Is_banned = user.Is_banned,
             Role = user.Role,
-            Password = user.Password
+            Password = user.Password,
+            Image = user.Image
         };
     }
 

@@ -8,7 +8,8 @@
 
         public string Password { get; set; } = null!;
 
-        public Boolean is_banned { get; set; } = false;
+        public string Image { get; set; }
+
     }
 
 }

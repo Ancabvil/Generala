@@ -3,6 +3,7 @@ using generala;
 using generala.Models.Database;
 using generala.Models.Mappers;
 using generala.Services;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +16,15 @@ builder.Services.AddScoped<UnitOfWork>();
 
 // Inyección de todos los repositorios
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ImageRepository>();
 
 // Inyección de Mappers
 builder.Services.AddScoped<UserMapper>();
+builder.Services.AddScoped<ImageMapper>();
 
 // Inyección de Servicios
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ImageService>();
 
 //------------------------------------------------
 
@@ -41,6 +45,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+// wwwroot
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
+});
+
 
 await SeedDataBaseAsync(app.Services);
 
