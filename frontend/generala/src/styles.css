@@ -4,8 +4,3 @@ html, body {
     font: inherit;
 }
 
-:root {
-    --primary-color: #305AA8; 
-    --secondary-color: #7461C7;
-    --primary-color-dark: #2A345D;
-}

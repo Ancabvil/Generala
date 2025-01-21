@@ -1,0 +1,146 @@
+ /*contenedor principal pagina de registro */
+.signup-container {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    /* background-image: linear-gradient(135deg, #6b3d04, #e1ca34, #421b06, #a37133), url("https://us.123rf.com/450wm/finkelsen/finkelsen2010/finkelsen201000063/157046719-mano-tirando-cinco-dados-sobre-una-mesa-de-madera.jpg");
+    */
+    background-image: url("https://img.freepik.com/fotos-premium/dados-mesa-madera-juegos-casino_127657-10921.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    background-attachment: fixed;
+    
+  }
+  
+  /* logo */
+  .logo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .logo img {
+    width: 150px;
+  }
+  
+  /* caja inicio de sesión */
+  .signup-box {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 2rem;
+    width: 300px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    padding-bottom: 5px;
+    margin-top: 35%;
+  }
+  
+  /* caja con iconos */
+  .user-logo {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* icono usuario */
+  .user-logo img {
+    width: 100px;
+    border-radius: 50%;
+  }
+  
+  /* titulo registro*/
+  .registrar {
+    font-size: 20px; 
+    margin-bottom: 20px; 
+    font-weight: bold;
+  }
+  
+  
+  .icon-input-container {
+    position: relative; 
+  }
+  
+  /*iconos*/
+  .input-icon {
+    position: absolute; 
+    top: 50%;
+    left: 10px; 
+    transform: translateY(-50%);
+    color: gray;
+    font-size: 1.2em;
+  }
+  
+  /*campos entrada*/
+  .icon-input {
+    width: 100%; 
+    padding: 10px 40px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  /* campo de entrada enfocado */
+  .icon-input:focus {
+    border-color: #fdbb2d; 
+    outline: none;
+  }
+  
+  p {
+    font-size: 0.8em; 
+    white-space: nowrap; 
+    margin-top: 1rem; 
+    color: white; 
+  }
+  
+  a {
+    color: #fdbb2d; 
+    text-decoration: none; 
+    font-weight: bold; 
+  }
+  
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* botón de envío */
+  input[type="submit"] {
+    background-color: #7461c7; 
+    color: #ffffff; 
+    padding: 12px 20px; 
+    border: none;
+    border-radius: 100px; 
+    cursor: pointer;
+    font-size: 16px; 
+    transition: background-color 0.3s; 
+  }
+  
+  /* botón de envío al pasar el cursor */
+  input[type="submit"]:hover {
+    background-color: #5e47a1;
+  }
+  
+  /* botón de envío desactivado */
+  input[type="submit"]:disabled {
+    background-color: #c3b7e6;
+    color: #ffffff;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* clase para los mensajes de error */
+  .error {
+    color: rgb(69, 0, 0);
+    text-align: left;
+    font-size: x-small;
+    height: 14px;
+    padding-top: 2px;
+    margin-bottom: 10px;
+  }
+  
