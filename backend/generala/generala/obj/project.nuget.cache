@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xwF1gcjqWRM=",
+  "dgSpecHash": "yProlfZMGck=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj",
+  "projectFilePath": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\generala.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Usuario\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

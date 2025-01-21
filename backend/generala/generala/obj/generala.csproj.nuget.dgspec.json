@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj": {}
+    "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\generala.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj": {
+    "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\generala.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj",
+        "projectUniqueName": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\generala.csproj",
         "projectName": "generala",
-        "projectPath": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\generala.csproj",
+        "projectPath": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\generala.csproj",
         "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\obj\\",
+        "outputPath": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
