@@ -1,3 +1,57 @@
-<app-navbar></app-navbar>
-<p>login works!</p>
-<app-footer></app-footer>
+<div class="login-container">
+
+    <div class="logo">
+      <a routerLink="/">
+        <img src="GeneralaIcon.jpg" alt="Generala logo" />
+      </a>
+    </div>
+  
+    <div class="login-box">
+  
+  
+      <p class="iniciar">Iniciar sesión</p>
+  
+      <form (submit)="submit()">
+        <div>
+  
+          <div class="p-field icon-input-container">
+            <i class="pi pi-envelope input-icon"></i>
+            <input type="text" pInputText placeholder="Correo electrónico" class="icon-input" required [(ngModel)]="email"
+              [ngModelOptions]="{standalone: true}" />
+          </div>
+
+          <div class="p-field icon-input-container">
+            <i class="pi pi-envelope input-icon"></i>
+            <input type="text" pInputText placeholder="Nickname" class="icon-input" required [(ngModel)]="nickname"
+              [ngModelOptions]="{standalone: true}" />
+          </div>
+  
+          <div class="p-field icon-input-container">
+            <i class="pi pi-lock input-icon"></i>
+            <input type="password" pInputText placeholder="Contraseña" class="icon-input" required [(ngModel)]="password"
+              [ngModelOptions]="{standalone: true}" />
+          </div>
+  
+          <div class="p-field-checkbox">
+            <p-checkbox [(ngModel)]="rememberMe" [ngModelOptions]="{standalone: true}" inputId="rememberMe"
+              binary="true"></p-checkbox>
+            <label for="rememberMe" class="remember-me-label">Recuérdame</label>
+          </div>
+  
+          <div>
+            <button type="submit" class="p-button">Iniciar sesión</button>
+          </div>
+  
+        </div>
+      </form>
+  
+      <div class="register-link">
+        <p>¿Eres un cliente nuevo? <a (click)="redirectToSignup()">Regístrate</a></p>
+      </div>
+  
+    </div>
+  
+    <footer>
+      <p>© 2024 INNOVACOM.</p>
+    </footer>
+  </div>

@@ -54,7 +54,6 @@ public class AuthController : ControllerBase
                 Claims = new Dictionary<string, object>
                 {
                     { ClaimTypes.NameIdentifier, user.Id },  // ID del usuario
-                    { ClaimTypes.Name, user.Nickname },              // Nickname del usuario
                     { ClaimTypes.Role, user.Role }               // Rol del usuario
                 },
                 // Expiración del token en 5 años

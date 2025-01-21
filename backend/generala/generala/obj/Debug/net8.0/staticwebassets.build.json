@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "6/5VdxtOAEFopcvZR+4uPku0EzeGqQRMU2tVrW0sWqA=",
+  "Hash": "9xbtoCWIHRd4oiQas6AGiy2E+fD7iUv9sQT9bWIWkIY=",
   "Source": "generala",
   "BasePath": "_content/generala",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "generala\\wwwroot",
       "Source": "generala",
-      "ContentRoot": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\wwwroot\\",
       "BasePath": "_content/generala",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\wwwroot\\Image\\image-avatar.png",
+      "Identity": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\wwwroot\\Image\\image-avatar.png",
       "SourceId": "generala",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Usuario\\Documents\\GitHub\\Generala\\backend\\generala\\generala\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\wwwroot\\",
       "BasePath": "_content/generala",
       "RelativePath": "Image/image-avatar.png",
       "AssetKind": "All",

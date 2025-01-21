@@ -4,6 +4,8 @@ using generala.Models.Database;
 using generala.Models.Mappers;
 using generala.Services;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +47,20 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod();
     });
 });
+// Configuración de autenticacion
+builder.Services.AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        Settings settings = builder.Configuration.GetSection(Settings.SECTION_NAME).Get<Settings>();
+        string key = settings.JwtKey;
 
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+        };
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
