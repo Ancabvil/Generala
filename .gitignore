@@ -1,5 +1,6 @@
+################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
 
-backend/generala/.vs/generala/v17/DocumentLayout.json
-backend/generala/.vs/generala/v17/.suo
-backend/generala/.vs/generala/FileContentIndex/cc0ce6e1-f125-4867-a03b-f8fecf6e1d08.vsidx
-backend/generala/.vs/generala/config/applicationhost.config
+/.vs/Ecommerce/FileContentIndex/6bd4cd98-2b09-4d73-b515-80f809ac904a.vsidx
+/.vs/Ecommerce/FileContentIndex
