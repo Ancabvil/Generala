@@ -1,13 +1,17 @@
 /* Contenedor principal para la página de inicio de sesión */
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; 
-    background: linear-gradient(135deg, #182c53, #305aa8, #834ac8, #4b2b73);
-    position: relative;
-  }
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  /* background-image: linear-gradient(135deg, #6b3d04, #e1ca34, #421b06, #a37133), url("https://us.123rf.com/450wm/finkelsen/finkelsen2010/finkelsen201000063/157046719-mano-tirando-cinco-dados-sobre-una-mesa-de-madera.jpg");
+  */
+  background-image: url("https://img.freepik.com/fotos-premium/dados-mesa-madera-juegos-casino_127657-10921.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  background-attachment: fixed;
+}
   
   /* Estilo para el logo de la parte superior */
   .logo {
@@ -19,7 +23,7 @@
   
   /* Tamaño del logo */
   .logo img {
-    width: 250px; 
+    width: 100px; 
     height: auto;
   }
   
@@ -123,7 +127,7 @@
   /* Estilo para el botón de envío */
   .p-button {
     border: 0px;
-    background-color: #6f42c1;
+    background-color: #e6ad00;
     color: white;
     border-radius: 30px;
     padding: 15px;

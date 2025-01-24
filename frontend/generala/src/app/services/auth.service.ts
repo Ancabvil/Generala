@@ -22,7 +22,6 @@ export class AuthService {
 
   async signup(formData: any): Promise<Result<any>> { // Registro
     return this.api.post<any>('Auth/Signup', formData);
-    
   }
 
   async login(authData: AuthRequest, rememberMe: boolean): Promise<Result<AuthResponse>> { // Iniciar sesión

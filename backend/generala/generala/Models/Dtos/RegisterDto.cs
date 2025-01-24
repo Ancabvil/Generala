@@ -8,7 +8,7 @@
 
         public string Password { get; set; } = null!;
 
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
 
     }
 

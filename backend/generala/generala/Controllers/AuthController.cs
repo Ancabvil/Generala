@@ -37,40 +37,30 @@ public class AuthController : ControllerBase
     {
         try
         {
-            // Se usa el método LoginAsync para verificar el usuario y la contraseña
-            var user = await _userService.LoginAsync(model.Email, model.Password);
+            var user = await _userService.LoginAsync(model.Identifier, model.Password);
 
-
-            // Si el usuario es null, se devuelve Unauthorized
             if (user == null)
             {
                 return Unauthorized("Datos de inicio de sesión incorrectos.");
             }
 
-            // Se crea el token JWT
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                // Se añaden los datos que autorizan al usuario
                 Claims = new Dictionary<string, object>
-                {
-                    { ClaimTypes.NameIdentifier, user.Id },  // ID del usuario
-                    { ClaimTypes.Role, user.Role }               // Rol del usuario
-                },
-                // Expiración del token en 5 años
+            {
+                { ClaimTypes.NameIdentifier, user.Id },
+                { ClaimTypes.Role, user.Role }
+            },
                 Expires = DateTime.UtcNow.AddYears(5),
-
-                // Clave y algoritmo de firmado
                 SigningCredentials = new SigningCredentials(
                     _tokenParameters.IssuerSigningKey,
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
-            // Creación del token
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             string stringToken = tokenHandler.WriteToken(token);
 
-            // Se devuelve el resultado de inicio de sesión con el token y los datos del usuario
             var loginResult = new LoginResult
             {
                 AccessToken = stringToken,
@@ -79,36 +69,51 @@ public class AuthController : ControllerBase
 
             return Ok(loginResult);
         }
-
         catch (InvalidOperationException)
         {
-            // Si hay algún error, se devuelve Unauthorized
             return Unauthorized("Datos de inicio de sesión incorrectos.");
         }
     }
 
-
     // SIGN UP CREAR NUEVO USUARIO
     [HttpPost("Signup")]
-    public async Task<ActionResult<RegisterDto>> SignUp([FromBody] RegisterDto model)
+    public async Task<ActionResult<RegisterDto>> SignUp([FromForm] RegisterDto model)
     {
-
+        //Verifica si el modelo recibido es válido
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        // Verifica si ya existe un usuario con el mismo correo
-        var existingUser = await _userService.GetUserByEmailAsync(model.Email);
-        if (existingUser != null)
+        //Verifica si ya existe un usuario con el mismo correo
+        var existingUserByEmail = await _userService.GetUserByEmailAsync(model.Email);
+        if (existingUserByEmail != null)
         {
-            return Conflict("El correo electrónico ya está en uso.");
+            return Conflict(new { message = "El correo electrónico ya está en uso." });
         }
 
-        var newUser = await _userService.RegisterAsync(model);
+        //Verifica si ya existe un usuario con el mismo nickname
+        var existingUserByNickname = await _userService.GetUserByNicknameAsync(model.Nickname);
+        if (existingUserByNickname != null)
+        {
+            return Conflict(new { message = "El nickname ya está en uso." });
+        }
 
-        var userDto = _userMapper.UserToDto(newUser);
+        try
+        {
+            //Crea un nuevo usuario
+            var newUser = await _userService.RegisterAsync(model);
 
-        return CreatedAtAction(nameof(Login), new { email = userDto.Email }, userDto);
+            //Mapea el nuevo usuario al DTO
+            var userDto = _userMapper.UserToDto(newUser);
+
+
+            return CreatedAtAction(nameof(Login), new { email = userDto.Email }, userDto);
+        }
+        catch (Exception ex)
+        {
+            //errores generales
+            return StatusCode(500, new { message = "Ocurrió un error inesperado.", detail = ex.Message });
+        }
     }
 }

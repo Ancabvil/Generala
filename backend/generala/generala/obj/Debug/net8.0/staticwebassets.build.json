@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "9xbtoCWIHRd4oiQas6AGiy2E+fD7iUv9sQT9bWIWkIY=",
+  "Hash": "dZdPt4jcvbjjLNFsV22GDMQv/b7+qjL8KoTT9QpTzCQ=",
   "Source": "generala",
   "BasePath": "_content/generala",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\wwwroot\\Image\\image-avatar.png",
+      "Identity": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\wwwroot\\avatars\\imagen-avatar.png",
       "SourceId": "generala",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Usuario\\Documents\\GitHub\\2trimestre\\Generala\\backend\\generala\\generala\\wwwroot\\",
       "BasePath": "_content/generala",
-      "RelativePath": "Image/image-avatar.png",
+      "RelativePath": "avatars/imagen-avatar.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -33,7 +33,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Image\\image-avatar.png"
+      "OriginalItemSpec": "wwwroot\\avatars\\imagen-avatar.png"
     }
   ]
 }

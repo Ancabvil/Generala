@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/menu']);
     }
 
     // Obtiene la URL a la que el usuario quería acceder
@@ -64,45 +64,59 @@ export class RegisterComponent implements OnInit {
 
   async submit() {
     if (this.myForm.valid) {
-      const formData = this.myForm.value;
-      console.log('Datos enviados para el registro:', formData);//borrar
-      const signupResult = await this.authService.signup(formData); // Registro
-
-      if (signupResult.success) {
-        console.log('Registro exitoso', signupResult);      
-
-        const authData = { email: formData.email,  nickname: formData.nickname, password: formData.password };
-        const loginResult = await this.authService.login(authData, false);
-
-        if (loginResult.success) {
-          console.log('Inicio de sesión exitoso', loginResult);
-
-          
-          const user = this.authService.getUser();
-          const nickname = user ? user.nickname : null;
-
-          Swal.fire({ // Cuadro de diálogo
-            title: "Te has registrado con éxito",
-            text: `¡Hola, ${nickname}!`,
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => this.redirect()
-          });
-
-        } else {
-          this.throwError("Error en el inicio de sesión");
-        }
-
-      } else {
-        this.throwError("Error en el registro");
+      const formData = new FormData(); // Usamos FormData para incluir el archivo
+      const formValues = this.myForm.value;
+  
+      // Añadimos los valores del formulario al FormData
+      formData.append('nickname', formValues.nickname);
+      formData.append('email', formValues.email);
+      formData.append('password', formValues.password);
+  
+      // Solo añadimos la imagen si se seleccionó
+      if (formValues.image) {
+        formData.append('image', formValues.image);
       }
+  
+      try {
+        // Llamamos al servicio para registrarse
+        const signupResult = await this.authService.signup(formData);
+  
+        if (signupResult.success) {
+          console.log('Registro exitoso', signupResult);
 
+          const identifier = formValues.nickname || formValues.email;
+          const authData = { identifier, password: formValues.password };
+          //const authData = { email: formValues.email, nickname: formValues.nickname, password: formValues.password };
+          const loginResult = await this.authService.login(authData, false);
+  
+          if (loginResult.success) {
+            console.log('Inicio de sesión exitoso', loginResult);
+  
+            const user = this.authService.getUser();
+            const nickname = user ? user.nickname : null;
+  
+            Swal.fire({
+              title: "Te has registrado con éxito",
+              text: `¡Hola, ${nickname}!`,
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didClose: () => this.redirect(),
+            });
+          } else {
+            this.throwError("Error en el inicio de sesión");
+          }
+        } else {
+          this.throwError("Error en el registro");
+        }
+      } catch (error) {
+        this.throwError("Error en la comunicación con el servidor");
+        console.error(error);
+      }
     } else {
       this.throwError("Formulario no válido");
     }
-
   }
 
   // redirigir al usuario
@@ -110,7 +124,7 @@ export class RegisterComponent implements OnInit {
     if (this.redirectTo != null) {
       this.router.navigateByUrl(this.redirectTo);
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/menu']);
     }
   }
 
@@ -131,4 +145,6 @@ export class RegisterComponent implements OnInit {
       confirmButtonText: "Vale"
     });
   }
+
+
 }

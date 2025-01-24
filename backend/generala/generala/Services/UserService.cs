@@ -6,8 +6,8 @@ using generala.Models.Database.Repositories.Implementations;
 using generala.Models.Dtos;
 using generala.Models.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
 
 namespace generala.Services;
 
@@ -62,9 +62,9 @@ public class UserService
         return user;
     }
 
-    public async Task<User> LoginAsync(string email, string password)
+    public async Task<User> LoginAsync(string identifier, string password)
     {
-        var user = await _unitOfWork.UserRepository.GetUserByEmail(email);
+        var user = await _unitOfWork.UserRepository.GetUserByIdentifierAsync(identifier);
 
         if (user == null || user.Password != PasswordHelper.Hash(password))
         {
@@ -76,12 +76,24 @@ public class UserService
 
     public async Task<User> RegisterAsync(RegisterDto model)
     {
-        // Verifica si el usuario ya existe
-        var existingUser = await GetUserByEmailAsync(model.Email);
-        if (existingUser != null)
+        // Verifica si ya existe un usuario con el mismo correo
+        var existingUserByEmail = await _unitOfWork.UserRepository.GetUserByEmail(model.Email);
+        if (existingUserByEmail != null)
         {
-            throw new Exception("El usuario ya existe.");
+            throw new Exception("El correo electrónico ya está en uso.");
         }
+
+        // Verifica si ya existe un usuario con el mismo nickname
+        var existingUserByNickname = await _unitOfWork.UserRepository.GetQueryable()
+            .FirstOrDefaultAsync(u => u.Nickname == model.Nickname);
+
+        if (existingUserByNickname != null)
+        {
+            throw new Exception("El nickname ya está en uso.");
+        }
+
+        // Guarda la imagen del avatar si se proporciona
+        string imageUrl = await SaveAvatarAsync(model.Image);
 
         var newUser = new User
         {
@@ -90,7 +102,7 @@ public class UserService
             Is_banned = false,
             Role = "User", // Rol por defecto
             Password = PasswordHelper.Hash(model.Password),
-            Image = string.IsNullOrEmpty(model.Image) ? "default_image_url" : model.Image
+            Image = imageUrl
         };
 
         await _unitOfWork.UserRepository.InsertUserAsync(newUser);
@@ -98,21 +110,15 @@ public class UserService
 
         return newUser;
     }
-
     // Modificar los datos del usuario
     public async Task ModifyUserAsync(UserProfileDto userDto)
     {
         var existingUser = await _unitOfWork.UserRepository.GetUserById(userDto.UserId);
 
-        if (existingUser != null)
+        if (existingUser == null)
         {
-            Console.WriteLine("El usuario con ID ", userDto.UserId, " no existe.");
+            throw new Exception($"El usuario con ID {userDto.UserId} no existe.");
         }
-
-        Console.WriteLine("ID del usuario: " + existingUser.Id);
-
-        existingUser.Id = userDto.UserId;
-        existingUser.Role = userDto.Role;
 
         if (!string.IsNullOrEmpty(userDto.Nickname))
         {
@@ -126,30 +132,23 @@ public class UserService
 
         if (!string.IsNullOrEmpty(userDto.Password))
         {
-            existingUser.Password = userDto.Password;
+            existingUser.Password = PasswordHelper.Hash(userDto.Password);
         }
 
-        //if (false.IsNullOrEmpty(userDto.Is_banned))
-        //{
-        //    existingUser.is_banned = userDto.Is_banned;
-        //}
+        
 
         await UpdateUser(existingUser);
         await _unitOfWork.SaveAsync();
     }
-
-
     // Modificar el rol del usuario
     public async Task ModifyUserRoleAsync(int userId, string newRole)
     {
         var existingUser = await _unitOfWork.UserRepository.GetUserById(userId);
 
-        if (existingUser != null)
+        if (existingUser == null)
         {
-            Console.WriteLine("El usuario con ID ", userId, " no existe.");
+            throw new Exception($"El usuario con ID {userId} no existe.");
         }
-
-        Console.WriteLine("ID del usuario: " + existingUser.Id);
 
         if (!string.IsNullOrEmpty(newRole))
         {
@@ -159,7 +158,6 @@ public class UserService
         await UpdateUser(existingUser);
         await _unitOfWork.SaveAsync();
     }
-
     // Eliminar usuario
     public async Task DeleteUserAsync(int userId)
     {
@@ -173,9 +171,40 @@ public class UserService
         _unitOfWork.UserRepository.DeleteUser(user);
         await _unitOfWork.SaveAsync();
     }
+
     public async Task UpdateUser(User user)
     {
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.SaveAsync();
+    }
+
+    private async Task<string> SaveAvatarAsync(IFormFile avatar)
+    {
+        if (avatar == null)
+        {
+            return null; // URL predeterminada para avatares
+        }
+
+        var folderPath = Path.Combine("wwwroot", "avatars");
+
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+
+        var uniqueFileName = $"{Guid.NewGuid()}_{avatar.FileName}";
+        var filePath = Path.Combine(folderPath, uniqueFileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await avatar.CopyToAsync(stream);
+        }
+
+        return $"/avatars/{uniqueFileName}";
+    }
+
+    public async Task<User> GetUserByNicknameAsync(string nickname)
+    {
+        return await _unitOfWork.UserRepository.GetUserByNicknameAsync(nickname);
     }
 }

@@ -44,4 +44,15 @@ public class UserRepository : Repository<User, int>
     {
         _context.Set<User>().Remove(user);
     }
+
+    public async Task<User> GetUserByIdentifierAsync(string identifier)
+    {
+        return await GetQueryable()
+            .FirstOrDefaultAsync(user => user.Email == identifier || user.Nickname == identifier);
+    }
+
+    public async Task<User> GetUserByNicknameAsync(string nickname)
+    {
+        return await _context.User.FirstOrDefaultAsync(u => u.Nickname == nickname);
+    }
 }

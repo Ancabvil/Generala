@@ -126,7 +126,7 @@ export class ApiService {
       email: dataRaw.email,
       is_banned: dataRaw.is_banned,
       role: dataRaw.role,
-      avatar: dataRaw.avatar
+      image: dataRaw.image
 
     };
     return user;
@@ -146,7 +146,7 @@ export class ApiService {
         email: u.email,
         is_banned: u.is_banned,
         role: u.role,
-        avatar: u.avatar
+        image: u.image
       }
       users.push(user);
     }

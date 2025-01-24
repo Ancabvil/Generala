@@ -30,7 +30,7 @@ public class Seeder
                     Password = PasswordHelper.Hash("123456"),
                     Is_banned = false,
                     Role = "Admin",
-                    Image = "image/image-avatar.png"
+                    Image = "avatars/imagen-avatar.png"
                 }
                 ,
                 new User {
@@ -39,7 +39,7 @@ public class Seeder
                     Password = PasswordHelper.Hash("123456"),
                     Is_banned = false,
                     Role = "User",
-                    Image = "image/image-avatar.png"
+                    Image = "image/imagen-avatar.png"
                 }
             ];
 

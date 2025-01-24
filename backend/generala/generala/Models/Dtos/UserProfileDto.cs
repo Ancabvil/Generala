@@ -14,6 +14,6 @@
 
         public string Password { get; set; } = null!;
 
-        public string Image { get; set; } = null!;
+        public string Image { get; set; }
     }
 }

@@ -1,56 +1,105 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #ffb300;
-    color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.navbar{
+  background-color: rgb(237, 196, 134);
+}
+
+span {
+  color: #321701;
+  font-weight: 400;
+  font-size: larger;
+}
+
+a {
+  text-decoration: none;
+  text-decoration-color: none;
+}
+
+img:hover {
+  /* transform: scale(0.95); */
+  filter: drop-shadow(0px 4px 10px rgb(208, 223, 255));
+}
+
+.session-link {
+  cursor: pointer;
+}
+
+button {
+  border: 0px;
+  background-color: #321701;
+  color: white;
+  border-radius: 30px;
+  padding: 15px;
+  font-size: small;
+  letter-spacing: 1px;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #885303;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.logo {
+  margin: 10px;
+}
+
+.desktop-logo {
+  display: block;
+}
+
+
+.user-icon {
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.logout{
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.logo{
+  height: 30px;
+}
+
+@media (max-width: 768px) {
+  .menu-items {
+      flex-direction: column;
+      align-items: flex-start;
   }
-  
-  .navbar-brand {
-    display: flex;
-    align-items: center;
+
+  .greeting,
+  .icon,
+  .p-button {
+      margin-bottom: 10px;
   }
-  
-  .navbar-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
+
+  .icon {
+      width: 30px;
   }
-  
-  .navbar-buttons {
-    display: flex;
-    gap: 10px;
+
+  .logout{
+      margin: 5px;
   }
-  
-  .btn {
-    padding: 8px 15px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+
+  .desktop-logo {
+      display: none;
   }
-  
-  .login-btn {
-    background-color: #ffffff;
-    color: #0056b3;
-    transition: background-color 0.3s;
+
+  .user-icon {
+      margin: 5px;
   }
-  
-  .login-btn:hover {
-    background-color: #e0e0e0;
+
+
+  .logo {
+      height: 40px;
+      margin: 0;
   }
-  
-  .register-btn {
-    background-color: #ffd700;
-    color: #0056b3;
-    font-weight: bold;
-    transition: background-color 0.3s;
+
+  .p-button {
+      padding: 10px;
+      font-size: smaller;
   }
-  
-  .register-btn:hover {
-    background-color: #ffcc00;
-  }
-  
+}

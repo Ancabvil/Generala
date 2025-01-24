@@ -44,7 +44,9 @@ export class LoginComponent implements OnInit {
   }
 
   async submit() {
-    const authData = { email: this.email, nickname: this.nickname, password: this.password };
+    const identifier = this.nickname || this.email;
+    //const authData = { email: this.email, nickname: this.nickname, password: this.password };
+    const authData = { identifier, password: this.password };
     const result = await this.authService.login(authData, this.rememberMe);
 
     if (result.success) {
@@ -58,7 +60,7 @@ export class LoginComponent implements OnInit {
 
       const user = this.authService.getUser();
       const userId = user ? user.userId : null;
-
+      
 
 
       const nickname = user ? user.nickname : null;
@@ -87,12 +89,12 @@ export class LoginComponent implements OnInit {
     if (this.redirectTo != null) {
       this.router.navigateByUrl(this.redirectTo);
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/menu']);
     }
   }
 
   // redirigir al usuario desde el registro
   redirectToSignup() {
-    this.router.navigate(['/signup'], { queryParams: { redirectTo: this.redirectTo } });
+    this.router.navigate(['/register'], { queryParams: { redirectTo: this.redirectTo } });
   }
 }

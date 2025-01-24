@@ -77,9 +77,23 @@ app.UseCors("AllowAllOrigins");
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
+            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "avatars"))
 });
 
+var staticFilesPath = Path.Combine(AppContext.BaseDirectory, "wwwroot");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath),
+    RequestPath = ""
+});
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Request: {context.Request.Path}");
+    await next();
+});
+
+app.UseStaticFiles();
 
 await SeedDataBaseAsync(app.Services);
 
