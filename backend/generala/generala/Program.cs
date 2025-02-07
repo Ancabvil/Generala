@@ -6,6 +6,8 @@ using generala.Services;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using generala.Network;
+using generala.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,14 +21,22 @@ builder.Services.AddScoped<UnitOfWork>();
 // Inyección de todos los repositorios
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ImageRepository>();
+builder.Services.AddScoped<FriendRequestRepository>();
+builder.Services.AddScoped<FriendshipRepository>();
 
 // Inyección de Mappers
 builder.Services.AddScoped<UserMapper>();
 builder.Services.AddScoped<ImageMapper>();
+builder.Services.AddScoped<FriendRequestMapper>();
 
 // Inyección de Servicios
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ImageService>();
+
+
+builder.Services.AddSingleton<WebSocketNotificationService>();
+builder.Services.AddSingleton<WebSocketHandler>();
+builder.Services.AddSingleton<WebSocketNetwork>();
 
 //------------------------------------------------
 
@@ -61,7 +71,18 @@ builder.Services.AddAuthentication()
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
         };
     });
+
 var app = builder.Build();
+
+// Habilitar WebSockets
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+app.UseWebSockets(webSocketOptions);
+
+// Middleware WebSocket
+app.UseMiddleware<WebSocketTokenMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -72,6 +93,9 @@ if (app.Environment.IsDevelopment())
 
 // Permite CORS
 app.UseCors("AllowAllOrigins");
+
+app.UseAuthentication();
+
 
 // wwwroot
 app.UseStaticFiles(new StaticFileOptions
@@ -96,6 +120,7 @@ app.Use(async (context, next) =>
 app.UseStaticFiles();
 
 await SeedDataBaseAsync(app.Services);
+
 
 
 app.UseHttpsRedirection();

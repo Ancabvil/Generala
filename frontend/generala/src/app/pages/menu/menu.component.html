@@ -1,10 +1,104 @@
 <app-navbar></app-navbar>
+
 <div class="menu-container">
+  <!-- Información del Usuario -->
   <div class="user-info">
     <div class="logo_usuario">
       <img [src]="avatarUrl" alt="Avatar de {{ user.nickname }}" class="avatar-img" />
       <p>{{ user.nickname }}</p>
     </div>
   </div>
+
+  <!-- Estadísticas -->
+  <div class="game-stats">
+    <h3>Estadísticas del Juego</h3>
+    <p><strong>Jugadores Conectados:</strong> {{ totalPlayersOnline }}</p> 
+    <p><strong>Partidas Activas:</strong> {{ activeGames }}</p>
+    <p><strong>Jugadores en Partidas:</strong> {{ playersInGames }}</p>
+    <button class="play-btn" (click)="goToMatchmaking()">¡Ir a Matchmaking!</button>
+  </div>
+
+ <!-- Contenedor principal de las listas -->
+<div class="friends-container">
+  
+  <!-- Lista de Amigos -->
+  <div class="friends-list">
+    <h3>Amigos</h3>
+    <input type="text" [(ngModel)]="searchQuery" (input)="searchFriends()" placeholder="Buscar amigos..." />
+
+    <div class="scrollable-container">
+      <div class="card-container">
+        <div class="friend-card" *ngFor="let friend of filteredFriends">
+          <img [src]="friend.friendAvatar" alt="Avatar de {{ friend.friendNickname }}" class="card-avatar" />
+          <span class="card-name">{{ friend.friendNickname }}</span>
+          <span class="status" [ngClass]="{
+            'online': friend.friendStatus === 'conectado', 
+            'offline': friend.friendStatus === 'desconectado'
+          }">
+            {{ friend.friendStatus }}
+          </span>          
+          <button class="delete-btn" (click)="confirmRemoveFriend(friend.friendId)">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de Usuarios -->
+  <div class="users-list">
+    <h3>Usuarios Registrados</h3>
+    <input type="text" [(ngModel)]="searchQueryUsers" (input)="searchUsers()" placeholder="Buscar usuarios..." />
+
+    <div class="scrollable-container">
+      <div class="card-container">
+        <div class="user-card" *ngFor="let user of filteredUsers">
+          <img [src]="user.avatarUrl" alt="Avatar de {{ user.nickname }}" class="card-avatar" />
+          <span class="card-name">{{ user.nickname }}</span>
+          <button 
+            class="add-btn" 
+            [ngClass]="{'disabled-btn': getFriendshipStatus(user.userId) !== 'Agregar'}"
+            [disabled]="getFriendshipStatus(user.userId) !== 'Agregar'"
+            (click)="sendFriendRequest(user.userId)">
+            {{ getFriendshipStatus(user.userId) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de Solicitudes de Amistad -->
+  <div class="requests-list">
+    <h3>Solicitudes de Amistad</h3>
+
+    <div class="scrollable-container">
+      <div class="card-container">
+        <div class="request-card" *ngFor="let request of friendRequests">
+          <span class="card-name">{{ request.senderNickname }}</span>
+          <div class="card-buttons">
+            <button class="accept-btn" (click)="acceptFriendRequest(request.id)">Aceptar</button>
+            <button class="reject-btn" (click)="rejectFriendRequest(request.id)">Rechazar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Lista de Invitaciones para Jugar -->
+    <div class="game-invites">
+      <h3>Invitaciones para Jugar</h3>
+      <div class="scrollable-container">
+        <div class="card-container">
+          <div class="invite-card" *ngFor="let invite of gameInvites">
+            <span class="card-name">{{ invite.senderNickname }}</span>
+            <div class="card-buttons">
+              <button class="accept-btn" (click)="acceptGameInvite(invite.id)">Aceptar</button>
+              <button class="reject-btn" (click)="rejectGameInvite(invite.id)">Rechazar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
+
 <app-footer></app-footer>

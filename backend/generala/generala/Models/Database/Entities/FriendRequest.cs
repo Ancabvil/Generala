@@ -6,19 +6,21 @@ using Microsoft.EntityFrameworkCore;
 namespace generala.Models.Database.Entities
 {
     [Index(nameof(Id), IsUnique = true)]
-    public class Friendship
+    public class FriendRequest
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [ForeignKey("User1")]
-        public int User1Id { get; set; }
-        public User User1 { get; set; } = null!;
+        [ForeignKey("Sender")]
+        public int SenderId { get; set; }
+        public User Sender { get; set; }
 
-        [ForeignKey("User2")]
-        public int User2Id { get; set; }
-        public User User2 { get; set; } = null!;
+        [ForeignKey("Receiver")]
+        public int ReceiverId { get; set; }
+        public User Receiver { get; set; } 
+
+        public bool IsAccepted { get; set; } = false;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

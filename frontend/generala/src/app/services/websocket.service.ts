@@ -1,111 +1,113 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, Injector } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
+  private socket: WebSocket;
+  private reconnectInterval = 5000;
+  private isManualDisconnect = false;
+  private authService: AuthService;
 
-  // Eventos
   connected = new Subject<void>();
   messageReceived = new Subject<any>();
   disconnected = new Subject<void>();
+  
 
-  private onConnected() {
-    console.log('Socket connected');
-    this.connected.next();
+  private onlineUsers = new BehaviorSubject<any[]>([]);
+  onlineUsers$ = this.onlineUsers.asObservable(); 
+
+  constructor(private injector: Injector) {}
+
+  private getAuthService() {
+    if (!this.authService) {
+      this.authService = this.injector.get(AuthService);
+    }
+    return this.authService;
   }
 
-  private onMessageReceived(message: string) {
-    this.messageReceived.next(message);
+  connect(token: string) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      
+      return;
+    }
+
+    const socketUrl = `wss://localhost:7215/ws?token=${token}`;
+    //console.log(`Conectando a WebSocket: ${socketUrl}`);
+
+    this.socket = new WebSocket(socketUrl);
+
+    this.socket.onopen = () => {
+      console.log("WebSocket conectado.");
+      this.connected.next();
+
+      this.sendMessage("get_online_users", "");
+    };
+
+    this.socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+    
+      if (message.Type === "online_users") {
+        const onlineUsers = JSON.parse(message.Content);
+        console.log("Usuarios en línea actualizados:", onlineUsers);
+        this.onlineUsers.next(onlineUsers);
+      }
+    
+      this.messageReceived.next(message);
+    };
+    
+
+    this.socket.onclose = (event) => {
+      console.warn("WebSocket desconectado:", event.reason);
+      this.disconnected.next();
+
+      if (!this.isManualDisconnect) {
+        this.reconnect();
+      }
+    };
+
+    this.socket.onerror = (error) => {
+      console.error("Error en WebSocket:", error);
+      this.disconnected.next();
+      this.reconnect();
+    };
   }
 
-  private onError(error: any) {
-    console.error('Error:', error);
+  sendMessage(type: string, content: string) {
+    if (this.isConnected()) {
+      const message = JSON.stringify({ Type: type, Content: content });
+      this.socket.send(message);
+    } else {
+      //console.warn("No se puede enviar, WebSocket no está conectado.");
+    }
   }
 
-  private onDisconnected() {
-    console.log('WebSocket connection closed');
-    this.disconnected.next();
+  disconnect() {
+    this.isManualDisconnect = true;
+    if (this.socket) {
+      this.socket.close(1000, 'Closed by client');
+      this.socket = null;
+    }
   }
 
-  // ========= Usando Websockets nativos =============
-
-  private nativeSocket: WebSocket;
-
-  isConnectedNative() {
-    return this.nativeSocket
-      && (this.nativeSocket.readyState == WebSocket.CONNECTING || this.nativeSocket.readyState == WebSocket.OPEN);
+  isConnected(): boolean {
+    return this.socket && this.socket.readyState === WebSocket.OPEN;
   }
 
-  connectNative() {
-    this.nativeSocket = new WebSocket(environment.socketUrl);
+  private reconnect() {
+    if (!this.isManualDisconnect) {
 
-    // Evento de apertura de conexión
-    this.nativeSocket.onopen = _ => this.onConnected();
-
-    // Evento de mensaje recibido
-    this.nativeSocket.onmessage = (event) => this.onMessageReceived(event.data);
-
-    // Evento de error generado
-    this.nativeSocket.onerror = (event) => this.onError(event);
-
-    // Evento de cierre de conexión
-    this.nativeSocket.onclose = (event) => this.onDisconnected();
-  }
-
-  sendNative(message: string) {
-    this.nativeSocket.send(message);
-  }
-
-  disconnectNative() {
-    this.nativeSocket.close(1000, 'Closed by client');
-    this.nativeSocket = null;
-  }
-
-  // ============ Usando Rxjs =============
-
-  rxjsSocket: WebSocketSubject<string>;
-
-  isConnectedRxjs() {
-    return this.rxjsSocket && !this.rxjsSocket.closed;
-  }
-
-  connectRxjs() {
-    this.rxjsSocket = webSocket({
-      url: environment.socketUrl,
-
-      // Evento de apertura de conexión
-      openObserver: {
-        next: () => this.onConnected()
-      },
-
-      // La versión de Rxjs está configurada por defecto para manejar JSON
-      // Si queremos manejar cadenas de texto en crudo debemos configurarlo
-      serializer: (value: string) => value,
-      deserializer: (event: MessageEvent) => event.data
-    });
-
-    this.rxjsSocket.subscribe({
-      // Evento de mensaje recibido
-      next: (message: string) => this.onMessageReceived(message),
-
-      // Evento de error generado
-      error: (error) => this.onError(error),
-
-      // Evento de cierre de conexión
-      complete: () => this.onDisconnected()
-    });
-  }
-
-  sendRxjs(message: string) {
-    this.rxjsSocket.next(message);
-  }
-
-  disconnectRxjs() {
-    this.rxjsSocket.complete();
-    this.rxjsSocket = null;
+      setTimeout(() => {
+        const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
+        if (token) {
+          this.connect(token);
+        } else {
+          console.warn("No hay token válido para reconectar WebSocket.");
+        }
+      }, this.reconnectInterval);
+    }
   }
 }

@@ -4,5 +4,6 @@ export interface User {
     email : string,
     image : string,
     role: string,
-    is_banned: boolean
+    is_banned: boolean,
+    avatarUrl?: string
 }

@@ -2,97 +2,72 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 
-namespace generala.Controllers;
-
-[Route("socket")]
-[ApiController]
-public class WebSocketController : ControllerBase
+namespace generala.Controllers
 {
-    [HttpGet]
-    public async Task ConnectAsync()
+    [Route("socket")]
+    [ApiController]
+    public class WebSocketController : ControllerBase
     {
-        // Si la petición es de tipo websocket la aceptamos
-        if (HttpContext.WebSockets.IsWebSocketRequest)
+        [HttpGet]
+        public async Task ConnectAsync()
         {
-            // Aceptamos la solicitud
-            WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-
-            // Manejamos la solicitud.
-            await HandleWebsocketAsync(webSocket);
-        }
-        // En caso contrario la rechazamos
-        else
-        {
-            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-        }
-
-        // Cuando este método finalice, se cerrará automáticamente la conexión con el websocket
-    }
-
-    private async Task HandleWebsocketAsync(WebSocket webSocket)
-    {
-        // Mientras que el websocket del cliente esté conectado
-        while (webSocket.State == WebSocketState.Open)
-        {
-            // Leemos el mensaje
-            string message = await ReadAsync(webSocket);
-
-            if (!string.IsNullOrWhiteSpace(message))
+            if (HttpContext.WebSockets.IsWebSocketRequest)
             {
-                // Procesamos el mensaje
-                string outMessage = $"[{string.Join(", ", message as IEnumerable<char>)}]";
-
-                // Enviamos respuesta al cliente
-                await SendAsync(webSocket, outMessage);
+                WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                await HandleWebsocketAsync(webSocket);
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
         }
-    }
 
-    private async Task<string> ReadAsync(WebSocket webSocket, CancellationToken cancellation = default)
-    {
-        // Creo un buffer para almacenar temporalmente los bytes del contenido del mensaje
-        byte[] buffer = new byte[4096];
-        // Creo un StringBuilder para poder ir creando poco a poco el mensaje en formato texto
-        StringBuilder stringBuilder = new StringBuilder();
-        // Creo un booleano para saber cuándo termino de leer el mensaje
-        bool endOfMessage = false;
-
-        do
+        private async Task HandleWebsocketAsync(WebSocket webSocket)
         {
-            // Recibo el mensaje pasándole el buffer como parámetro
-            WebSocketReceiveResult result = await webSocket.ReceiveAsync(buffer, cancellation);
+            
+            var buffer = new byte[4096];
 
-            // Si el resultado que se ha recibido es de tipo texto lo decodifico y lo meto en el StringBuilder
-            if (result.MessageType == WebSocketMessageType.Text)
+            try
             {
-                // Decodifico el contenido recibido
-                string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                // Lo añado al StringBuilder
-                stringBuilder.Append(message);
-            }
-            // Si el resultado que se ha recibido entonces cerramos la conexión
-            else if (result.CloseStatus.HasValue)
-            {
-                // Cerramos la conexión
-                await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, cancellation);
-            }
+                while (webSocket.State == WebSocketState.Open)
+                {
+                    var receiveTask = webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    var timeoutTask = Task.Delay(TimeSpan.FromSeconds(30)); // Espera 30 segundos
 
-            // Guardamos en nuestro booleano si hemos recibido el final del mensaje
-            endOfMessage = result.EndOfMessage;
+                    var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
+
+                    if (completedTask == timeoutTask)
+                    {
+                        
+                        byte[] pingMessage = Encoding.UTF8.GetBytes("ping");
+                        await webSocket.SendAsync(new ArraySegment<byte>(pingMessage), WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                    else
+                    {
+                        WebSocketReceiveResult result = await receiveTask;
+
+                        if (result.MessageType == WebSocketMessageType.Close)
+                        {
+                            
+                            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", CancellationToken.None);
+                            break;
+                        }
+
+                        string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+
+                        byte[] responseMessage = Encoding.UTF8.GetBytes($"Echo: {message}");
+                        await webSocket.SendAsync(new ArraySegment<byte>(responseMessage), WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($" Error en WebSocket: {ex.Message}");
+            }
+            finally
+            {
+                Console.WriteLine("WebSocket cerrado.");
+            }
         }
-        // Repetiremos iteración si el socket permanece abierto y no se ha recibido todavía el final del mensaje
-        while (webSocket.State == WebSocketState.Open && !endOfMessage);
-
-        // Finalmente devolvemos el contenido del StringBuilder
-        return stringBuilder.ToString();
-    }
-
-    private Task SendAsync(WebSocket webSocket, string message, CancellationToken cancellation = default)
-    {
-        // Codificamos a bytes el contenido del mensaje
-        byte[] bytes = Encoding.UTF8.GetBytes(message);
-
-        // Enviamos los bytes al cliente marcando que el mensaje es un texto
-        return webSocket.SendAsync(bytes, WebSocketMessageType.Text, true, cancellation);
     }
 }

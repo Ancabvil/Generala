@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-
+using System.Text.Json;
 
 namespace generala.Controllers;
 
@@ -22,12 +22,14 @@ public class AuthController : ControllerBase
     private readonly TokenValidationParameters _tokenParameters;
     private readonly UserService _userService;
     private readonly UserMapper _userMapper;
+    private readonly WebSocketNotificationService _webSocketNotificationService;
 
-    public AuthController(UserService userService, UserMapper userMapper, IOptionsMonitor<JwtBearerOptions> jwtOptions)
+    public AuthController(UserService userService, UserMapper userMapper, IOptionsMonitor<JwtBearerOptions> jwtOptions, WebSocketNotificationService webSocketNotificationService)
     {
         _userService = userService;
         _userMapper = userMapper;
         _tokenParameters = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme).TokenValidationParameters;
+        _webSocketNotificationService = webSocketNotificationService;
     }
 
     // LOGIN 
@@ -44,13 +46,22 @@ public class AuthController : ControllerBase
                 return Unauthorized("Datos de inicio de sesión incorrectos.");
             }
 
+            var claims = new List<Claim>
+{
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("nickname", user.Nickname)
+            };
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Claims = new Dictionary<string, object>
             {
                 { ClaimTypes.NameIdentifier, user.Id },
                 { ClaimTypes.Role, user.Role }
+                
             },
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddYears(5),
                 SigningCredentials = new SigningCredentials(
                     _tokenParameters.IssuerSigningKey,
@@ -74,6 +85,30 @@ public class AuthController : ControllerBase
             return Unauthorized("Datos de inicio de sesión incorrectos.");
         }
     }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null)
+        {
+            return Unauthorized("Usuario no autenticado.");
+        }
+
+        int userId = int.Parse(userIdClaim.Value);
+        _webSocketNotificationService.RemoveConnection(userId);
+
+        await _webSocketNotificationService.BroadcastMessageAsync(new WebSocketMessageDto
+        {
+            Type = "user_disconnected",
+            Content = JsonSerializer.Serialize(new { userId })
+        });
+
+        return Ok(new { message = "Sesión cerrada correctamente.", userId });
+    }
+
+
 
     // SIGN UP CREAR NUEVO USUARIO
     [HttpPost("Signup")]

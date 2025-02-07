@@ -45,27 +45,15 @@ export class LoginComponent implements OnInit {
 
   async submit() {
     const identifier = this.nickname || this.email;
-    //const authData = { email: this.email, nickname: this.nickname, password: this.password };
     const authData = { identifier, password: this.password };
     const result = await this.authService.login(authData, this.rememberMe);
-
+  
     if (result.success) {
-      this.jwt = result.data.accessToken;
-      console.log('Inicio de sesión exitoso', result);
-
-      if (this.rememberMe) {
-        localStorage.setItem('jwtToken', this.jwt);
-      }
-
-
+  
       const user = this.authService.getUser();
-      const userId = user ? user.userId : null;
-      
-
-
-      const nickname = user ? user.nickname : null;
-      
-      Swal.fire({ // Cuadro de diálogo
+      const nickname = user?.nickname ?? 'Usuario';
+  
+      Swal.fire({
         title: "Inicio de sesión con éxito",
         text: `¡Hola, ${nickname}!`,
         icon: 'success',
@@ -74,16 +62,16 @@ export class LoginComponent implements OnInit {
         timerProgressBar: true,
         didClose: () => this.redirect()
       });
-
+  
     } else {
-      Swal.fire({ // Cuadro de diálogo
+      Swal.fire({
         title: "Usuario o contraseña incorrectos",
         icon: "error",
         confirmButtonText: "Vale"
       });
     }
   }
-
+  
   // redirigir al usuario
   redirect() {
     if (this.redirectTo != null) {
