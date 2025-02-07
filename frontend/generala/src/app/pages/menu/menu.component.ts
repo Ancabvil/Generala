@@ -13,6 +13,7 @@ import { User } from '../../models/user';
 import Swal from 'sweetalert2';
 import { GameService } from '../../services/game.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -46,7 +47,8 @@ export class MenuComponent implements OnInit {
     private authService: AuthService,
     private friendService: FriendService,
     private websocketService: WebsocketService,
-    private gameService: GameService
+    private gameService: GameService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -249,7 +251,7 @@ export class MenuComponent implements OnInit {
 
   //boton de matchmaking
   goToMatchmaking(): void {
-  
+    this.router.navigate(['/matchmaking']);
   }
   
   ngOnDestroy(): void {
