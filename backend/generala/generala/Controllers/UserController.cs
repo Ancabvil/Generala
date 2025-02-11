@@ -22,13 +22,13 @@ namespace generala.Controllers
             _userMapper = userMapper;
         }
 
-        // devuelve un usuario buscado por email
+        //devuelve un usuario buscado por email
         [HttpGet("/email/{email}")]
         public async Task<IActionResult> GetByEmailAsync(string email)
         {
             var user = await _userService.GetUserByEmailAsync(email);
 
-            if (user == null) // si no se encuentra el correo
+            if (user == null) 
             {
                 return NotFound(new { message = $"El usuario con el correo: '{email}' no ha sido encontrado." });
             }

@@ -19,7 +19,7 @@ namespace generala.Controllers
             _context = context;
         }
 
-        // Obtener la lista de amigos de un usuario
+        //Obtener la lista de amigos de un usuario
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetFriends(int userId)
         {
@@ -27,7 +27,7 @@ namespace generala.Controllers
             return Ok(friends);
         }
 
-        // Eliminar un amigo
+        //Eliminar un amigo
         [HttpDelete("remove")]
         public async Task<IActionResult> RemoveFriend(int userId, int friendId)
         {

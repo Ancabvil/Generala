@@ -23,7 +23,7 @@ namespace generala.Controllers
             _context = context;
         }
 
-        // 📌 Enviar solicitud de amistad
+        //Enviar solicitud 
         [HttpPost("send")]
         public async Task<IActionResult> SendFriendRequest(int senderId, int receiverId)
         {
@@ -48,7 +48,7 @@ namespace generala.Controllers
             return Ok(FriendRequestMapper.ToDto(request));
         }
 
-        // 📌 Aceptar solicitud de amistad
+        //Aceptar solicitud
         [HttpPost("accept")]
         public async Task<IActionResult> AcceptFriendRequest(int requestId)
         {
@@ -70,7 +70,7 @@ namespace generala.Controllers
             return Ok(new { message = "Solicitud aceptada, ahora son amigos." });
         }
 
-        // 📌 Rechazar solicitud de amistad
+        //Rechazar solicitud
         [HttpDelete("reject/{requestId}")]
         public async Task<IActionResult> RejectFriendRequest(int requestId)
         {
@@ -83,7 +83,7 @@ namespace generala.Controllers
             return Ok(new { message = "Solicitud rechazada." });
         }
 
-        // 📌 Obtener solicitudes pendientes
+        //Obtener solicitudes
         [HttpGet("pending/{userId}")]
         public async Task<IActionResult> GetPendingRequests(int userId)
         {
